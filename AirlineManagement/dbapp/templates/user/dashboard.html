@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<div class="dashboard-container">
+    <div class="container">
+        
+        <!-- WELCOME HEADER -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-navy mb-1">Hello, {{ session.user_name }}! 👋</h2>
+                <p class="text-muted">Boundless Air: Your sky, without limits.</p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-white text-navy shadow-sm p-2 px-3 rounded-pill border">
+                    <i class="bi bi-star-fill text-warning me-1"></i> Gold Member
+                </span>
+            </div>
+        </div>
+
+        <!-- ROW 1: SEARCH & OFFER (HEIGHT MATCHED) -->
+        <div class="row g-4 mb-4">
+            <!-- Search Card -->
+            <div class="col-lg-8">
+                <div class="card dash-card shadow-sm p-4 h-100">
+                    <h5 class="fw-bold text-navy mb-4"><i class="bi bi-search me-2"></i>Quick Flight Search</h5>
+                    <form action="{{ url_for('user.search') }}" method="GET">
+                        <div class="row g-2 align-items-center">
+                            <div class="col-md-5">
+                                <label class="small fw-bold text-muted">FROM</label>
+                                <select name="source" id="src" class="form-select border-0 bg-light py-2">
+                                    <option value="" disabled selected>Select Origin</option>
+                                    {% for airport in airports %}
+                                     <option value="{{ airport.code }}">{{ airport.city }} ({{ airport.code }})</option>
+                                     {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <div class="swap-btn mx-auto" onclick="swapCities()"><i class="bi bi-arrow-left-right"></i></div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="small fw-bold text-muted">TO</label>
+                                <select name="dest" id="dst" class="form-select border-0 bg-light py-2">
+                                    <option value="" disabled selected>Select Destination</option>
+                                    {% for airport in airports %}
+                                    <option value="{{ airport.code }}">{{ airport.city }} ({{ airport.code }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-8 mt-3">
+                                <label class="small fw-bold text-muted">DEPARTURE DATE</label>
+                                <input type="date" name="travel_date" id="tDate" class="form-control border-0 bg-light py-2" required>
+                            </div>
+                            <div class="col-md-4 mt-3">
+                                <label class="d-block">&nbsp;</label>
+                                <button class="btn btn-warning w-100 py-2 fw-bold rounded-3 shadow-sm">FIND FLIGHTS</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Exclusive Offer Card -->
+            <div class="col-lg-4">
+                <div class="card dash-card offer-card shadow-lg p-4 h-100">
+                    <div class="text-center">
+                        <div class="d-flex align-items-center justify-content-center mb-3">
+                            <i class="bi bi-gift-fill text-warning fs-3 me-2"></i>
+                            <h5 class="fw-bold text-warning mb-0">Exclusive Offer</h5>
+                        </div>
+                        <p class="small mb-3" style="color: rgba(255,255,255,0.8)">Get flat <strong>15% OFF</strong> on all domestic bookings this month.</p>
+                        <div class="promo-code mb-4">FLYBOUNDLESS15</div>
+                        <button class="btn btn-warning btn-sm fw-bold w-100 rounded-pill py-2">CLAIM VOUCHER</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROW 2: ACTIONS, BOOKINGS & TRENDING -->
+        <div class="row g-4">
+            <!-- Left: Actions & Bookings -->
+            <div class="col-lg-8">
+                <!-- QUICK ACTIONS -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="card dash-card shadow-sm p-3 text-center action-hover">
+                            <div class="action-icon mx-auto"><i class="bi bi-airplane"></i></div>
+                            <h6 class="fw-bold mb-0">Book New</h6>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card dash-card shadow-sm p-3 text-center action-hover">
+                            <div class="action-icon mx-auto"><i class="bi bi-radar"></i></div>
+                            <h6 class="fw-bold mb-0">Flight Status</h6>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card dash-card shadow-sm p-3 text-center action-hover">
+                            <div class="action-icon mx-auto"><i class="bi bi-x-circle"></i></div>
+                            <h6 class="fw-bold mb-0">Cancellations</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOOKINGS -->
+                <div class="card dash-card shadow-sm p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-navy mb-0"><i class="bi bi-journal-text me-2"></i>Recent Bookings</h5>
+                        {% if bookings|length > 0 %}<span class="badge bg-light text-navy border rounded-pill">{{ bookings|length }} Booked</span>{% endif %}
+                    </div>
+                    <div class="bookings-scroll-area">
+                        {% if not bookings %}
+                            <div class="text-center py-5">
+                                <img src="{{ url_for('static', filename='images/Empty-file.png') }}" height="70" class="opacity-25 mb-3" style="filter: grayscale(1);">
+                                <p class="text-muted">No adventures booked yet.</p>
+                            </div>
+                        {% else %}
+                            {% for b in bookings %}
+                            <div class="booking-item-card shadow-sm mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="text-center"><span class="route-code">{{ b.src }}</span><div class="small text-muted">{{ b.dep_time.strftime('%H:%M') }}</div></div>
+                                        <div class="text-muted px-2 position-relative"><i class="bi bi-airplane-fill small"></i><div class="route-line"></div></div>
+                                        <div class="text-center"><span class="route-code">{{ b.dst }}</span><div class="small text-muted">{{ b.dep_time.strftime('%d %b') }}</div></div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge {% if b.status == 'Confirmed' %}badge-confirmed{% else %}badge-cancelled{% endif %} rounded-pill px-3 py-2 mb-1">{{ b.status }}</span>
+                                        <div class="small fw-bold text-navy opacity-75">{{ b.airline }}</div>
+                                    </div>
+                                </div>
+                                <hr class="my-3 opacity-25">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="small text-muted"><i class="bi bi-person-circle me-1"></i> {{ b.passenger_name }} | <strong>Seat {{ b.seat_num }}</strong></div>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ url_for('user.download_ticket', b_id=b.id) }}" class="btn btn-outline-primary btn-action"><i class="bi bi-download me-1"></i> Ticket</a>
+                                        <button class="btn btn-outline-danger btn-action"><i class="bi bi-x-lg"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Trending Now -->
+            <div class="col-lg-4">
+                <h6 class="fw-bold text-navy mb-3"><i class="bi bi-fire text-danger me-2"></i>Trending Now</h6>
+                
+                <!-- Card 1 -->
+                <div class="card dash-card shadow-sm mb-3 overflow-hidden">
+                    <div class="trending-img-container">
+                        <img src="{{ url_for('static', filename='images/goa.jpeg') }}" class="trending-img">
+                        <span class="badge bg-danger position-absolute top-0 end-0 m-2 shadow-sm">Hot Deal</span>
+                    </div>
+                    <div class="p-3">
+                        <h6 class="fw-bold mb-1">Explore Goa</h6>
+                        <p class="small text-muted mb-0">Flights from ₹3,499</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card dash-card shadow-sm mb-3 overflow-hidden">
+                    <div class="trending-img-container">
+                        <img src="{{ url_for('static', filename='images/jaipur.jpeg') }}" class="trending-img">
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-2 shadow-sm">Heritage</span>
+                    </div>
+                    <div class="p-3">
+                        <h6 class="fw-bold mb-1">Royal Jaipur</h6>
+                        <p class="small text-muted mb-0">Flights from ₹2,999</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card dash-card shadow-sm mb-3 overflow-hidden">
+                    <div class="trending-img-container">
+                        <img src="{{ url_for('static', filename='images/kerala.jpeg') }}" class="trending-img">
+                        <span class="badge bg-success position-absolute top-0 end-0 m-2 shadow-sm">Seasonal</span>
+                    </div>
+                    <div class="p-3">
+                        <h6 class="fw-bold mb-1">Scenic Kerala</h6>
+                        <p class="small text-muted mb-0">Flights from ₹4,199</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('tDate').min = new Date().toISOString().split("T")[0];
+    function swapCities() {
+        const src = document.getElementById('src');
+        const dst = document.getElementById('dst');
+        const temp = src.value;
+        src.value = dst.value;
+        dst.value = temp;
+    }
+</script>
+{% endblock %}

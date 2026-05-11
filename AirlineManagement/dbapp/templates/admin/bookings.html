@@ -1,0 +1,221 @@
+{% extends "admin/admin_base.html" %}
+{% block admin_content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_bookings.css') }}">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-navy mb-0">Passenger Manifests</h3>
+        <p class="text-muted small">Monitor and manage all flight bookings across the network.</p>
+    </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="booking-stats-card shadow-sm">
+            <h6 class="small fw-bold text-muted">CONFIRMED</h6>
+            <h4 class="fw-bold text-navy mb-0">{{ counts.get('Confirmed', 0) }}</h4>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="booking-stats-card shadow-sm border-danger">
+            <h6 class="small fw-bold text-muted">CANCELLED</h6>
+            <h4 class="fw-bold text-navy mb-0">{{ counts.get('Cancelled', 0) }}</h4>
+        </div>
+    </div>
+</div>
+
+<!-- SEARCH & FILTER BAR -->
+<div class="premium-card p-3 mb-4 shadow-sm">
+    <form method="GET" action="{{ url_for('admin.manage_bookings') }}" class="row g-2">
+        <div class="col-md-5">
+            <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+                <input type="text" name="search" class="form-control border-0 bg-light py-2" 
+                       placeholder="Search by Name, ID, or Flight #" value="{{ search }}">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- FIXED: Removed 'b' variable references from the global filter -->
+            <select name="status" class="form-select border-0 bg-light py-2">
+                <option value="">All Statuses</option>
+                <option value="Confirmed" {{ 'selected' if selected_status == 'Confirmed' }}>Confirmed</option>
+                <option value="Cancelled" {{ 'selected' if selected_status == 'Cancelled' }}>Cancelled</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-navy w-100 rounded-pill py-2">APPLY</button>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('admin.manage_bookings') }}" class="btn btn-light w-100 border rounded-pill py-2 text-navy fw-bold">RESET</a>
+        </div>
+    </form>
+</div>
+
+<!-- DATA TABLE -->
+<div class="table-premium shadow-sm">
+    <table class="table mb-0">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Passenger</th>
+                <th>Flight & Route</th>
+                <th>Seat & Class</th>
+                <th>Paid Amount</th>
+                <th>Status</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in bookings %}
+            <tr>
+                <td class="fw-bold text-navy">#BA-{{ b.id }}</td>
+                <td>
+                    <div class="fw-bold">{{ b.passenger_name }}</div>
+                    <span class="pax-meta">{{ b.passenger_gender }}, {{ b.passenger_age }}Y | ID: {{ b.gov_id }}</span>
+                </td>
+                <td>
+                    <div class="fw-bold text-navy">{{ b.airline }} {{ b.flight_num }}</div>
+                    <span class="pax-meta">{{ b.src }} <i class="bi bi-arrow-right"></i> {{ b.dst }}</span>
+                </td>
+                <td>
+                    <span class="badge bg-light text-navy border rounded-pill">{{ b.seat_num }}</span>
+                    <span class="pax-meta">{{ b.class }}</span>
+                </td>
+                <td class="fw-bold">₹{{ "{:,.2f}".format(b.total_paid) }}</td>
+                <td>
+                    <select class="form-select form-select-sm badge-status border-0 status-{{ b.status }}"
+                            onchange="updateBookingStatus('{{ b.id }}', this)">
+                        <option value="Confirmed" {{ 'selected' if b.status == 'Confirmed' else '' }}>Confirmed</option>
+                        <option value="Cancelled" {{ 'selected' if b.status == 'Cancelled' else '' }}>Cancelled</option>
+                    </select>
+                </td>
+                <td class="text-end">
+                    <div class="d-flex justify-content-end gap-2">
+                        <!-- FIXED: Changed function name to match the script below -->
+                        <button class="btn btn-light btn-sm rounded-3 shadow-sm border" onclick="viewBooking('{{ b.id }}')" title="Full Details">
+                            <i class="bi bi-eye-fill"></i>
+                        </button>
+                        <a href="{{ url_for('admin.admin_download_ticket', bid=b.id) }}" class="btn btn-light btn-sm rounded-3 shadow-sm border text-primary">
+                            <i class="bi bi-file-earmark-pdf-fill"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header bg-navy text-white p-4">
+                <h5 class="modal-title fw-bold"><i class="bi bi-info-circle me-2"></i>Booking Deep-Dive</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0" id="modalLoader">
+                <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+            </div>
+            <div class="modal-body p-4" id="modalContent" style="display:none;">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-navy border-bottom pb-2 mb-3">Passenger Information</h6>
+                        <div class="detail-row"><span class="detail-label">Full Name</span><span class="detail-value" id="det_name"></span></div>
+                        <div class="detail-row"><span class="detail-label">Age / Gender</span><span class="detail-value" id="det_age_gen"></span></div>
+                        <div class="detail-row"><span class="detail-label">Govt ID</span><span class="detail-value" id="det_govid"></span></div>
+                        <div class="detail-row"><span class="detail-label">Nationality</span><span class="detail-value" id="det_nat"></span></div>
+                        <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value" id="det_phone"></span></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-navy border-bottom pb-2 mb-3">Flight & Seat</h6>
+                        <div class="detail-row"><span class="detail-label">Airline</span><span class="detail-value" id="det_airline"></span></div>
+                        <div class="detail-row"><span class="detail-label">Flight No.</span><span class="detail-value" id="det_fnum"></span></div>
+                        <div class="detail-row"><span class="detail-label">Seat & Class</span><span class="detail-value text-primary" id="det_seat_cls"></span></div>
+                        <div class="detail-row"><span class="detail-label">Departure</span><span class="detail-value" id="det_dep"></span></div>
+                        <div class="detail-row"><span class="detail-label">Route</span><span class="detail-value" id="det_route"></span></div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-3 bg-light rounded-3">
+                            <h6 class="fw-bold small text-muted mb-2">MEDICAL / ADDITIONAL INFO</h6>
+                            <p class="mb-0 small" id="det_med">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-light border-0">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 1. AJAX Update Status
+function updateBookingStatus(bookingId, selectEl) {
+    const newStatus = selectEl.value;
+    selectEl.disabled = true;
+
+    fetch("{{ url_for('admin.update_booking_status') }}", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ booking_id: bookingId, status: newStatus })
+    })
+    .then(res => res.json())
+    .then(data => {
+        selectEl.disabled = false;
+        if(data.success) {
+            selectEl.className = `form-select form-select-sm badge-status border-0 status-${newStatus}`;
+        }
+    });
+}
+
+// 2. AJAX View Details
+function viewBooking(bid) {
+    const modalElement = document.getElementById('detailsModal');
+    const modal = new bootstrap.Modal(modalElement);
+    
+    // Reset UI
+    document.getElementById('modalLoader').style.display = 'block';
+    document.getElementById('modalContent').style.display = 'none';
+    modal.show();
+
+    // Use a leading slash to ensure the path is absolute from the root
+    fetch(`/admin/booking/details/${bid}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server returned 500 error');
+            }
+            return response.json();
+        })
+        .then(response => {
+            if(response.success) {
+                const d = response.data;
+                document.getElementById('det_name').innerText = d.passenger_name || 'N/A';
+                document.getElementById('det_age_gen').innerText = `${d.passenger_age}Y / ${d.passenger_gender}`;
+                document.getElementById('det_govid').innerText = d.gov_id || 'N/A';
+                document.getElementById('det_nat').innerText = d.nationality || 'N/A';
+                document.getElementById('det_phone').innerText = d.phone_num || 'N/A';
+                document.getElementById('det_airline').innerText = d.airline || 'N/A';
+                document.getElementById('det_fnum').innerText = d.flight_num || 'N/A';
+                document.getElementById('det_seat_cls').innerText = `${d.seat_num} (${d.class})`;
+                document.getElementById('det_dep').innerText = d.dep_time || 'N/A';
+                document.getElementById('det_route').innerText = `${d.src} to ${d.dst}`;
+                document.getElementById('det_med').innerText = d.medical_info || "None reported";
+
+                document.getElementById('modalLoader').style.display = 'none';
+                document.getElementById('modalContent').style.display = 'block';
+            } else {
+                alert("Error: " + response.message);
+                modal.hide();
+            }
+        })
+        .catch(err => {
+            console.error("Fetch Error:", err);
+            alert("Internal Server Error (500). Check your Python Terminal for the exact SQL/Logic error.");
+            modal.hide();
+        });
+}
+</script>
+{% endblock %}

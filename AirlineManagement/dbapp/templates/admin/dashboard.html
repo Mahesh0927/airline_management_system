@@ -1,0 +1,175 @@
+{% extends "admin/admin_base.html" %}
+{% block admin_content %}
+
+<!-- Exclusive Metrics Grid -->
+<div class="row g-4 mb-5">
+    {% set items = [
+        {'title': 'Total Bookings', 'val': metrics.bookings, 'icon': 'bi-journal-check', 'color': 'bg-soft-blue', 'trend': '+12%'},
+        {'title': 'Total Revenue', 'val': '₹' ~ "{:,.0f}".format(metrics.revenue), 'icon': 'bi-currency-rupee', 'color': 'bg-soft-green', 'trend': '+8%'},
+        {'title': 'Active Flights', 'val': metrics.flights, 'icon': 'bi-airplane-engines', 'color': 'bg-soft-yellow', 'trend': 'Live'},
+        {'title': 'Reg. Users', 'val': metrics.users, 'icon': 'bi-people', 'color': 'bg-soft-purple', 'trend': '+5%'}
+    ] %}
+    {% for item in items %}
+    <div class="col-md-3">
+        <div class="metric-card shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="text-uppercase mb-0">{{ item.title }}</h6>
+                <div class="metric-icon-box {{ item.color }}">
+                    <i class="bi {{ item.icon }}"></i>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-navy">{{ item.val }}</h3>
+                <span class="badge {% if item.trend == 'Live' %}bg-warning-subtle text-warning{% else %}bg-success-subtle text-success{% endif %} rounded-pill" style="font-size: 0.6rem;">
+                    {{ item.trend }} {% if item.trend != 'Live' %}Trend{% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row g-4">
+    <!-- DECORATIVE ROUTE POPULARITY CHART -->
+    <div class="col-lg-8">
+        <div class="premium-card">
+            <div class="d-flex justify-content-between align-items-start mb-5">
+                <div>
+                    <h5 class="text-navy">Sector Performance</h5>
+                    <p class="text-muted">High-traffic flight route distribution</p>
+                </div>
+                <!-- RESTORED: Exclusive Analytics Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-navy text-white btn-sm rounded-pill px-4 shadow-sm fw-bold dropdown-toggle" data-bs-toggle="dropdown">
+                        EXCLUSIVE ANALYTICS
+                    </button>
+                    <ul class="dropdown-menu shadow border-0">
+                        <li><a class="dropdown-item small fw-bold" href="#"><i class="bi bi-calendar-month me-2"></i>Monthly View</a></li>
+                        <li><a class="dropdown-item small fw-bold" href="#"><i class="bi bi-graph-up-arrow me-2"></i>Yearly Projection</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item small text-primary fw-bold" href="#"><i class="bi bi-download me-2"></i>Export PDF</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <div class="chart-container">
+                        <!-- Centered Label -->
+                        <div class="chart-inner-text">
+                            <span class="text-muted fw-bold" style="font-size: 0.6rem; letter-spacing: 1px;">TOTAL</span>
+                            <h2 class="fw-bold text-navy mb-0" style="line-height:1;">{{ metrics.bookings }}</h2>
+                        </div>
+                        <canvas id="decorativeChart" 
+                            data-routes='{{ route_data|map(attribute="route")|list|tojson|safe }}'
+                            data-counts='{{ route_data|map(attribute="total_bookings")|list|tojson|safe }}'
+                            height="280">
+                        </canvas>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="ps-md-4">
+                        <p class="small fw-bold text-navy text-uppercase mb-3" style="letter-spacing: 1px;">Live Sectors</p>
+                        {% set colors = ['#001f2e', '#00a8e8', '#ffc107', '#003e5c', '#cbd5e1'] %}
+                        {% for r in route_data %}
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-light">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="legend-dot" data-color="{{ colors[loop.index0] }}"></div>
+                                <span class="small fw-bold text-navy">{{ r.route }}</span>
+                            </div>
+                            <span class="small fw-bold text-muted">{{ r.total_bookings }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIVE TRAFFIC SECTION -->
+    <div class="col-lg-4">
+        <div class="premium-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="text-navy mb-0">Live Traffic</h5>
+                <span class="pulse-indicator text-uppercase">Real-Time</span>
+            </div>
+            
+            <div class="traffic-list">
+                {% if recent_bookings %}
+                    {% for b in recent_bookings %}
+                    <div class="traffic-item d-flex align-items-center gap-3">
+                        <div class="bg-soft-blue rounded-circle p-2 text-center" style="width:40px; height:40px;">
+                            <i class="bi bi-person text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-0 small text-navy">{{ b.passenger_name }}</h6>
+                            <p class="text-muted" style="font-size: 0.7rem; margin-bottom: 0;">{{ b.flight_num }} | ₹{{ "{:,.0f}".format(b.total_paid) }}</p>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-success-subtle text-success rounded-pill" style="font-size: 0.55rem;">{{ b.status }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <p class="text-muted small">No traffic recorded</p>
+                    </div>
+                {% endif %}
+            </div>
+            <button class="btn btn-navy w-100 rounded-pill mt-4 fw-bold shadow-sm py-2">OPERATIONS LOG</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Legend Coloring (Fixes editor error)
+    document.querySelectorAll('.legend-dot').forEach(dot => {
+        dot.style.backgroundColor = dot.getAttribute('data-color');
+    });
+
+    // 2. Decorative Chart Initialization
+    const el = document.getElementById('decorativeChart');
+    if(!el) return;
+
+    const labels = JSON.parse(el.getAttribute('data-routes'));
+    const data = JSON.parse(el.getAttribute('data-counts'));
+
+    new Chart(el.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ['#001f2e', '#00a8e8', '#ffc107', '#003e5c', '#cbd5e1'],
+                borderWidth: 4,
+                borderColor: '#ffffff',
+                hoverOffset: 30,
+                borderRadius: 12,
+                spacing: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '85%',
+            animation: {
+                animateRotate: true,
+                duration: 2000,
+                easing: 'easeOutQuart'
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#001f2e',
+                    padding: 12,
+                    cornerRadius: 8,
+                    titleFont: { size: 14, weight: 'bold' }
+                }
+            }
+        }
+    });
+});
+</script>
+
+{% endblock %}

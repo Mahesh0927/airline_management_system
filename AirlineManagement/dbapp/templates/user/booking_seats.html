@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/seats.css') }}">
+
+<div class="container py-5">
+    <!-- Progress Stepper -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <div class="stepper-wrapper">
+                <div class="step-item completed">1 <span class="step-label">Details</span></div>
+                <div class="step-item active">2 <span class="step-label fw-bold">Seats</span></div>
+                <div class="step-item">3 <span class="step-label">Payment</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-5">
+        <!-- Aircraft Layout Column -->
+        <div class="col-lg-7">
+            <div class="plane-scroll-box" style="height: 750px; overflow-y: auto; border-radius: 40px;">
+                <div class="aircraft-body shadow-lg">
+                    <div class="cockpit-glass"></div>
+
+                    <!-- Windows Generation -->
+                    {% for i in range(1, 35) %}
+                        <div class="plane-window" style="--i: {{ (i * 50 + 150) ~ 'px' }}; left: 10px;"></div>
+                        <div class="plane-window" style="--i: {{ (i * 50 + 150) ~ 'px' }}; right: 10px;"></div>
+
+                        {% if i == 11 or i == 22 %}
+                            <div class="exit-door" style="--i: {{ i }}; left: 0;">EXIT</div>
+                            <div class="exit-door" style="--i: {{ i }}; right: 0;">EXIT</div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- FIRST CLASS (20 Seats: 5 Rows of 4 [2-2 config]) -->
+                    <div class="cabin-label">First Class • Ultimate Privacy</div>
+                    {% for row in range(1, 6) %}
+                    <div class="d-flex justify-content-center gap-4">
+                        <div class="d-flex gap-2">
+                            <div class="seat first-class" onclick="pick(this, 'First', 10000)" data-n="{{row}}A">{{row}}A</div>
+                            <div class="seat first-class" onclick="pick(this, 'First', 10000)" data-n="{{row}}B">{{row}}B</div>
+                        </div>
+                        <div style="width: 40px;"></div>
+                        <div class="d-flex gap-2">
+                            <div class="seat first-class" onclick="pick(this, 'First', 10000)" data-n="{{row}}C">{{row}}C</div>
+                            <div class="seat first-class" onclick="pick(this, 'First', 10000)" data-n="{{row}}D">{{row}}D</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- BUSINESS CLASS (30 Seats: 6 Rows of 5 [2-3 config]) -->
+                    <div class="cabin-label">Business Class • Executive Comfort</div>
+                    {% for row in range(6, 12) %}
+                    <div class="d-flex justify-content-center">
+                        <div class="d-flex gap-1">
+                            <div class="seat business" onclick="pick(this, 'Business', 4500)" data-n="{{row}}A">{{row}}A</div>
+                            <div class="seat business" onclick="pick(this, 'Business', 4500)" data-n="{{row}}B">{{row}}B</div>
+                        </div>
+                        <div style="width: 30px;"></div>
+                        <div class="d-flex gap-1">
+                            <div class="seat business" onclick="pick(this, 'Business', 4500)" data-n="{{row}}C">{{row}}C</div>
+                            <div class="seat business" onclick="pick(this, 'Business', 4500)" data-n="{{row}}D">{{row}}D</div>
+                            <div class="seat business" onclick="pick(this, 'Business', 4500)" data-n="{{row}}E">{{row}}E</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- ECONOMY CLASS (60 Seats: 10 Rows of 6 [3-3 config]) -->
+                    <div class="cabin-label">Economy Class • Smart Choice</div>
+                    {% for row in range(12, 22) %}
+                    <div class="d-flex justify-content-center">
+                        <div class="d-flex gap-1">
+                            <div class="seat" onclick="pick(this, 'Economy', 0)" data-n="{{row}}A">{{row}}A</div>
+                            <div class="seat" onclick="pick(this, 'Economy', 0)" data-n="{{row}}B">{{row}}B</div>
+                            <div class="seat" onclick="pick(this, 'Economy', 0)" data-n="{{row}}C">{{row}}C</div>
+                        </div>
+                        <div style="width: 20px;"></div>
+                        <div class="d-flex gap-1">
+                            <div class="seat" onclick="pick(this, 'Economy', 0)" data-n="{{row}}D">{{row}}D</div>
+                            <div class="seat" onclick="pick(this, 'Economy', 0)" data-n="{{row}}E">{{row}}E</div>
+                            <div class="seat" onclick="pick(this, 'Economy', 0)" data-n="{{row}}F">{{row}}F</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirm Sidebar -->
+        <div class="col-lg-5">
+            <div class="live-ticket shadow-lg mb-4">
+                <div class="ticket-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">BOUNDLESS AIR BOARDING PASS</span>
+                        <i class="bi bi-airplane"></i>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="row g-3 mb-4">
+                        <div class="col-6"><small class="text-muted d-block uppercase">Passenger</small><strong>{{ session.booking_data.passenger_name }}</strong></div>
+                        <div class="col-6 text-end"><small class="text-muted d-block uppercase">Flight</small><strong>{{ flight.flight_num }}</strong></div>
+                        <div class="col-4"><small class="text-muted d-block uppercase">Seat</small><span id="ticket_seat" class="h3 fw-bold text-primary">--</span></div>
+                        <div class="col-4"><small class="text-muted d-block uppercase">Class</small><span id="ticket_class" class="fw-bold">--</span></div>
+                        <div class="col-4 text-end"><small class="text-muted d-block uppercase">Date</small><strong>{{ flight.dep_time.strftime('%d %b') }}</strong></div>
+                    </div>
+                    <div class="barcode"></div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm p-4 rounded-4">
+                <h5 class="fw-bold text-navy mb-4">Fare Breakdown</h5>
+                <div class="d-flex justify-content-between mb-2"><span>Base Flight Price</span><span>₹{{ "{:,.2f}".format(flight.final_base_price) }}</span></div>
+                <div class="d-flex justify-content-between mb-4"><span>Class Upgrade</span><span class="text-success fw-bold" id="ui_premium">+ ₹0.00</span></div>
+                <hr>
+                <div class="d-flex justify-content-between h4 fw-bold text-danger mb-4"><span>Grand Total</span><span id="ui_total">₹{{ "{:,.2f}".format(flight.final_base_price) }}</span></div>
+                
+                <form action="/payment" method="POST">
+                    <input type="hidden" name="seat_num" id="form_seat">
+                    <input type="hidden" name="class_type" id="form_class">
+                    <input type="hidden" name="total_price" id="form_total">
+                    <button type="submit" id="payBtn" class="btn btn-warning w-100 py-3 rounded-pill fw-bold shadow" disabled>CONFIRM & PROCEED TO PAY</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const baseVal = parseFloat("{{ flight.final_base_price }}");
+    function pick(el, cls, prm) {
+        document.querySelectorAll('.seat').forEach(s => s.classList.remove('selected'));
+        el.classList.add('selected');
+        const n = el.getAttribute('data-n');
+        const t = baseVal + prm;
+
+        document.getElementById('ticket_seat').innerText = n;
+        document.getElementById('ticket_class').innerText = cls;
+        document.getElementById('ui_premium').innerText = "+ ₹" + prm.toLocaleString();
+        document.getElementById('ui_total').innerText = "₹" + t.toLocaleString();
+
+        document.getElementById('form_seat').value = n;
+        document.getElementById('form_class').value = cls;
+        document.getElementById('form_total').value = t;
+        document.getElementById('payBtn').disabled = false;
+    }
+</script>
+{% endblock %}

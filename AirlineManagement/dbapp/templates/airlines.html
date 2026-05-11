@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/airlines.css') }}">
+
+<!-- ================= AIRLINES HERO ================= -->
+<section class="airlines-hero">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Our Flight Partners</h1>
+        <p class="lead opacity-75">Bringing together India's finest carriers under the Boundless Air network.</p>
+    </div>
+</section>
+
+<div class="container my-5 py-4">
+    <div class="row g-5">
+        
+        <!-- IndiGo -->
+        <div class="col-md-6" id="IndiGo">
+            <div class="airline-card h-100">
+                <div class="airline-logo-container">
+                    <img src="{{ url_for('static', filename='images/indigo.png') }}" alt="IndiGo Logo">
+                </div>
+                <img src="{{ url_for('static', filename='images/indigo-flight.jpeg') }} " class="airline-img" alt="IndiGo Flight">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="fw-bold text-navy mb-0">IndiGo</h3>
+                        <span class="badge-fleet">Fleet Size: 300+</span>
+                    </div>
+                    <p class="text-muted small">India's largest passenger airline, known for its punctuality and vast network covering every corner of the country.</p>
+                    <ul class="airline-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Low-cost efficiency</li>
+                        <li><i class="bi bi-check-circle-fill"></i> 6E EATS Premium Meals</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Direct flights to 75+ Domestic cities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Air India -->
+        <div class="col-md-6" id="AirIndia">
+            <div class="airline-card h-100">
+                <div class="airline-logo-container">
+                    <img src="{{ url_for('static', filename='images/air_india.png') }}" alt="Air India Logo">
+                </div>
+                <img src="{{ url_for('static', filename='images/air-india-flight.jpg') }}" class="airline-img" alt="Air India Flight">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="fw-bold text-navy mb-0">Air India</h3>
+                        <span class="badge-fleet">Full Service Carrier</span>
+                    </div>
+                    <p class="text-muted small">The legendary Maharaja of Indian skies, offering a premium full-service experience with warm Indian hospitality.</p>
+                    <ul class="airline-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Complimentary Hot Meals</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Generous Baggage Allowance</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Wide-body aircraft for Metros</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vistara -->
+        <div class="col-md-6" id="Vistara">
+            <div class="airline-card h-100">
+                <div class="airline-logo-container">
+                    <img src="{{ url_for('static', filename='images/vistara.png') }}" alt="Vistara Logo">
+                </div>
+                <img src="{{ url_for('static', filename='images/vistara-flight.jpeg') }}" class="airline-img" alt="Vistara Flight">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="fw-bold text-navy mb-0">Vistara</h3>
+                        <span class="badge-fleet">Luxury Partner</span>
+                    </div>
+                    <p class="text-muted small">A joint venture of Tata and Singapore Airlines, Vistara brings a new level of luxury to Indian domestic travel.</p>
+                    <ul class="airline-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Premium Economy Class</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Starbucks Coffee on board</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Mood-lit cabins for relaxation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SpiceJet -->
+        <div class="col-md-6" id="SpiceJet">
+            <div class="airline-card h-100">
+                <div class="airline-logo-container">
+                    <img src="{{ url_for('static', filename='images/spicejet.png') }}" alt="SpiceJet Logo">
+                </div>
+                <img src="{{ url_for('static', filename='images/spicejet-flight.jpeg') }}" class="airline-img" alt="SpiceJet Flight">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="fw-bold text-navy mb-0">SpiceJet</h3>
+                        <span class="badge-fleet">Regional Leader</span>
+                    </div>
+                    <p class="text-muted small">Famous for its colorful branding and extensive regional connectivity, making travel affordable for millions.</p>
+                    <ul class="airline-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> SpiceMax extra legroom seats</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Extensive Tier-2 & 3 network</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Frequent Flyer Rewards</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Akasa Air -->
+        <div class="col-md-6" id="AkasaAir">
+            <div class="airline-card h-100">
+                <div class="airline-logo-container">
+                    <img src="{{ url_for('static', filename='images/akasa-air.png') }}" alt="Akasa Air Logo">
+                </div>
+                <img src="{{ url_for('static', filename='images/akasa-air-fight.jpeg') }}" class="airline-img" alt="Akasa Air Flight">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="fw-bold text-navy mb-0">Akasa Air</h3>
+                        <span class="badge-fleet">Newest Fleet</span>
+                    </div>
+                    <p class="text-muted small">India's most dependable airline, offering a warm and efficient flying experience with the youngest fleet in the country.</p>
+                    <ul class="airline-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> USB ports at every seat</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Café Akasa Gourmet Menu</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Eco-friendly operations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Air India Express -->
+        <div class="col-md-6" id="AIExpress">
+            <div class="airline-card h-100">
+                <div class="airline-logo-container">
+                    <img src="{{ url_for('static', filename='images/air-india-express.png') }}" alt="Air India Express Logo">
+                </div>
+                <img src="{{ url_for('static', filename='images/air-india-express-flight.jpg') }}" class="airline-img" alt="Air India Express Flight">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="fw-bold text-navy mb-0">AI Express</h3>
+                        <span class="badge-fleet">Smart Connector</span>
+                    </div>
+                    <p class="text-muted small">A subsidiary of Air India, focusing on value-for-money connectivity across India and the Middle East with vibrant new branding.</p>
+                    <ul class="airline-feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Gourmair in-flight dining</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Xpress Ahead priority services</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Extensive regional reach</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CALL TO ACTION -->
+    <div class="mt-5 pt-4 text-center">
+        <h4 class="fw-bold text-navy mb-4">Choose your preferred airline and take off!</h4>
+        <a href="/" class="btn btn-warning px-5 py-3 rounded-pill fw-bold shadow">BOOK YOUR SEAT NOW</a>
+    </div>
+</div>
+{% endblock %}

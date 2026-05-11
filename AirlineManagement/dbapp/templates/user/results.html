@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+
+<section class="results-header">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold mb-0">{{ src }} <i class="bi bi-arrow-right mx-2 text-warning"></i> {{ dst }}</h2>
+            <p class="mb-0 opacity-75"><i class="bi bi-calendar3 me-2"></i>{{ date }} | Available Flights</p>
+        </div>
+        <a href="/" class="btn btn-outline-warning rounded-pill">Modify Search</a>
+    </div>
+</section>
+
+<div class="container mb-5">
+    {% if not flights %}
+        <div class="text-center py-5">
+            <i class="bi bi-airplane-engines display-1 text-muted opacity-25"></i>
+            <h3 class="mt-3 text-muted">No flights found for this route on the selected date.</h3>
+            <p>Try searching for a different date or nearby airport.</p>
+        </div>
+    {% else %}
+        {% for flight in flights %}
+        <div class="flight-card shadow-sm">
+            <div class="row g-0 align-items-center">
+                <!-- Airline Name -->
+                <div class="col-md-2 airline-info text-center">
+                    <h5 class="fw-bold text-navy mb-0">{{ flight.airline }}</h5>
+                    <small class="text-muted">{{ flight.flight_num }}</small>
+                </div>
+
+                <!-- Timeline and Times -->
+                <div class="col-md-7 p-4">
+                    <div class="row align-items-center text-center">
+                        <div class="col-4">
+                            <h4 class="fw-bold mb-0">{{ flight.dep_time.strftime('%H:%M') }}</h4>
+                            <p class="small text-muted mb-0">{{ src }}</p>
+                        </div>
+                        <div class="col-4">
+                            <div class="flight-timeline">
+                                <div class="dot"></div>
+                                <div class="plane-line">
+                                    <i class="bi bi-airplane-fill"></i>
+                                </div>
+                                <div class="dot"></div>
+                            </div>
+                            <small class="text-muted mt-2 d-block">Non-stop</small>
+                        </div>
+                        <div class="col-4">
+                            <h4 class="fw-bold mb-0">{{ flight.arr_time.strftime('%H:%M') }}</h4>
+                            <p class="small text-muted mb-0">{{ dst }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price & Booking -->
+                <div class="col-md-3 price-section">
+                    {% if flight.discount_pct > 0 %}
+                        <span class="discount-badge">SAVE {{ flight.discount_pct }}% OFF</span>
+                        <div class="old-price">₹{{ "{:,.2f}".format(flight.base_price) }}</div>
+                    {% endif %}
+                    
+                    <div class="final-price">₹{{ "{:,.2f}".format(flight.final_price) }}</div>
+                    
+                    <!-- Login Restriction Logic -->
+                    {% if session.user_id %}
+                        <a href="/book/{{ flight.id }}" class="btn btn-warning w-100 mt-2 fw-bold rounded-pill">BOOK NOW</a>
+                    {% else %}
+                        <button onclick="showLoginMsg()" class="btn btn-outline-secondary w-100 mt-2 fw-bold rounded-pill">LOGIN TO BOOK</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<script>
+    function showLoginMsg() {
+        alert("Restriction: Please login to your Boundless Air account to proceed with booking.");
+        window.location.href = "/login";
+    }
+</script>
+{% endblock %}

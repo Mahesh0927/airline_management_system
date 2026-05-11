@@ -1,0 +1,247 @@
+{% extends "admin/admin_base.html" %}
+{% block admin_content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_flight.css') }}">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold text-navy mb-0">Flight Operations</h4>
+        <p class="text-muted small">Viewing schedule for <span class="text-primary fw-bold">{{ selected_date }}</span></p>
+    </div>
+    <button class="btn btn-navy shadow-sm rounded-pill px-4 py-2" data-bs-toggle="modal" data-bs-target="#addFlightModal">
+        <i class="bi bi-plus-lg me-2"></i> INITIALIZE NEW FLIGHT
+    </button>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-card">
+    <form method="GET" action="{{ url_for('admin.manage_flights') }}" class="row align-items-end g-3">
+        <!-- Date Filter -->
+        <div class="col-md-3">
+            <label class="filter-label">Operational Date</label>
+            <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="bi bi-calendar-event text-primary"></i></span>
+                <input type="date" name="filter_date" value="{{ selected_date }}" class="form-control input-glass">
+            </div>
+        </div>
+
+        <!-- Time Filter (NEW) -->
+        <div class="col-md-3">
+            <label class="filter-label">Departure From</label>
+            <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="bi bi-clock text-primary"></i></span>
+                <input type="time" name="filter_time" value="{{ selected_time }}" class="form-control input-glass">
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-warning w-100 fw-bold rounded-3 shadow-sm">
+                <i class="bi bi-funnel-fill me-2"></i> APPLY
+            </button>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('admin.manage_flights') }}" class="btn btn-light w-100 fw-bold rounded-3 border">
+                RESET
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- FLIGHTS TABLE -->
+<div class="flight-table-card">
+    <div class="table-responsive">
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th>Airline & Flight</th>
+                    <th>Sector / Route</th>
+                    <th>Departure / Arrival</th>
+                    <th>Availability</th>
+                    <th>Base Price</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if not flights %}
+                <tr>
+                    <td colspan="7" class="text-center py-5 text-muted italic">
+                        <i class="bi bi-airplane opacity-25 display-4 d-block mb-2"></i>
+                        No flights scheduled for this date.
+                    </td>
+                </tr>
+                {% endif %}
+                
+                {% for f in flights %}
+                <tr>
+                    <td>
+                        <div class="fw-bold text-navy">{{ f.airline }}</div>
+                        <div class="small text-muted">{{ f.flight_num }}</div>
+                    </td>
+                    <td>
+                        <div class="route-badge shadow-sm px-3 py-2" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                            <span class="text-navy fw-bold" style="font-size: 0.85rem;">{{ f.src }}</span>
+                            <i class="bi bi-airplane-fill text-warning mx-2" style="font-size: 0.7rem; transform: rotate(90deg);"></i>
+                            <span class="text-navy fw-bold" style="font-size: 0.85rem;">{{ f.dst }}</span>
+                            <div class="ms-2 text-muted" style="font-size: 0.65rem; letter-spacing: 1px;">
+                                ({{ f.src_code }} <i class="bi bi-dot"></i> {{ f.dst_code }})
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="d-flex flex-column">
+                            <div class="fw-bold text-navy" style="font-size: 0.95rem;">
+                                <i class="bi bi-box-arrow-up-right me-1 text-success" style="font-size: 0.7rem;"></i>
+                                {{ f.dep_time.strftime('%H:%M') }}
+                            </div>
+                            <div class="text-muted" style="font-size: 0.8rem;">
+                                <i class="bi bi-box-arrow-in-bottom-right me-1 text-danger" style="font-size: 0.7rem;"></i>
+                                {{ f.arr_time.strftime('%H:%M') }}
+                            </div>
+                            <div class="mt-1" style="font-size: 0.65rem; font-weight: 700; color: #94a3b8;">
+                                {{ f.dep_time.strftime('%d %b %Y') }}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress" style="height: 6px; width: 100px; margin-bottom: 4px;">
+                            <!-- Progress using CSS variable --p -->
+                            <div class="progress-bar-custom" style="--p: {{ (f.booked_count / 110 * 100)|int }};"></div>
+                        </div>
+                        <small class="text-muted" style="font-size: 0.7rem;">{{ f.booked_count }} / 110 Seats</small>
+                    </td>
+                    <td class="fw-bold text-navy">₹{{ "{:,.0f}".format(f.base_price) }}</td>
+                    <td>
+                        <select class="form-select form-select-sm status-pill border-0 status-{{ f.status }}" 
+                                onchange="changeStatus('{{ f.id }}', this)">
+                            <option value="Scheduled" {{ 'selected' if f.status == 'Scheduled' else '' }}>Scheduled</option>
+                            <option value="Delayed" {{ 'selected' if f.status == 'Delayed' else '' }}>Delayed</option>
+                            <option value="Landed" {{ 'selected' if f.status == 'Landed' else '' }}>Landed</option>
+                            <option value="Cancelled" {{ 'selected' if f.status == 'Cancelled' else '' }}>Cancelled</option>
+                        </select>
+                    </td>
+                    <td class="text-end">
+                        <a href="{{ url_for('admin.delete_flight', fid=f.id) }}" class="btn-action btn btn-outline-danger btn-sm" 
+                           onclick="return confirm('Permanently remove flight {{ f.flight_num }}?')">
+                            <i class="bi bi-trash3-fill"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- INITIALIZE FLIGHT MODAL -->
+<div class="modal fade" id="addFlightModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content shadow-lg border-0" style="border-radius: 28px; overflow: hidden;">
+            <div class="modal-header bg-navy text-white p-4">
+                <h5 class="modal-title fw-bold"><i class="bi bi-airplane-engines me-2"></i>Initialize New Flight</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <form action="{{ url_for('admin.add_flight') }}" method="POST">
+                <div class="modal-body p-5 bg-light">
+                    <div class="row g-4">
+                        <!-- Airline Select -->
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Airline Operator</label>
+                            <select name="airline" class="form-select border-0 shadow-sm py-2" required>
+                                <option value="" selected disabled>Select Airline</option>
+                                <option>IndiGo</option><option>Air India</option>
+                                <option>Vistara</option><option>SpiceJet</option>
+                                <option>Akasa Air</option><option>Air India Express</option>
+                            </select>
+                        </div>
+
+                        <!-- Flight Number -->
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Flight Number</label>
+                            <input type="text" name="flight_num" class="form-control border-0 shadow-sm py-2" placeholder="e.g. BA-702" required>
+                        </div>
+
+                        <!-- Departure Airport -->
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Origin Airport</label>
+                            <select name="dep" class="form-select border-0 shadow-sm py-2" required>
+                                <option value="" selected disabled>From City</option>
+                                {% for a in airports %}
+                                    <option value="{{a.code}}">{{a.city}} ({{a.code}})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Arrival Airport -->
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Destination Airport</label>
+                            <select name="arr" class="form-select border-0 shadow-sm py-2" required>
+                                <option value="" selected disabled>To City</option>
+                                {% for a in airports %}
+                                    <option value="{{a.code}}">{{a.city}} ({{a.code}})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Departure Time -->
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Departure (Date & Time)</label>
+                            <input type="datetime-local" name="dep_t" class="form-control border-0 shadow-sm py-2" required>
+                        </div>
+
+                        <!-- Arrival Time -->
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Arrival (ETA)</label>
+                            <input type="datetime-local" name="arr_t" class="form-control border-0 shadow-sm py-2" required>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Base Price (INR)</label>
+                            <div class="input-group shadow-sm rounded">
+                                <span class="input-group-text border-0 bg-white">₹</span>
+                                <input type="number" name="price" class="form-control border-0 py-2" placeholder="0.00" required>
+                            </div>
+                        </div>
+
+                        <!-- Discount -->
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Discount Percentage (%)</label>
+                            <input type="number" name="disc" class="form-control border-0 shadow-sm py-2" value="0" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer bg-light border-0 p-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">DISCARD</button>
+                    <button type="submit" class="btn btn-navy rounded-pill px-4 shadow">INITIALIZE OPERATIONS</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal remains exactly the same as your reference... -->
+
+<script>
+    function changeStatus(flightId, selectEl) {
+        const newStatus = selectEl.value;
+        selectEl.disabled = true;
+
+        fetch("{{ url_for('admin.update_status') }}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ flight_id: flightId, status: newStatus })
+        })
+        .then(res => res.json())
+        .then(data => {
+            selectEl.disabled = false;
+            if(data.success) {
+                selectEl.className = `form-select form-select-sm status-pill border-0 status-${newStatus}`;
+            }
+        });
+    }
+</script>
+{% endblock %}

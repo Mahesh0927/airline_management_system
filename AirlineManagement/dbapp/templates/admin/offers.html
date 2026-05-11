@@ -1,0 +1,88 @@
+{% extends "admin/admin_base.html" %}
+{% block admin_content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_offers.css') }}">
+
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+        <h3 class="fw-bold text-navy mb-0">Marketing & Offers</h3>
+        <p class="text-muted small">Create and manage high-conversion promotional codes.</p>
+    </div>
+    <button class="btn btn-navy shadow-sm rounded-pill px-4 py-2" data-bs-toggle="modal" data-bs-target="#addPromoModal">
+        <i class="bi bi-plus-circle-fill me-2"></i> CREATE NEW PROMO
+    </button>
+</div>
+
+<div class="row g-4">
+    {% if not promos %}
+    <div class="col-12 text-center py-5">
+        <i class="bi bi-tags text-muted opacity-25 display-1"></i>
+        <h5 class="text-muted mt-3">No active promotions found.</h5>
+    </div>
+    {% else %}
+        {% for p in promos %}
+        <div class="col-md-6 col-xl-4">
+            <div class="offer-card-ui border-0 shadow-sm">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="promo-code-badge">{{ p.code }}</div>
+                    <div class="discount-circle">{{ p.discount_pct }}%</div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="small fw-bold text-muted text-uppercase d-block mb-1">Status</label>
+                    <span class="badge status-{{ p.status }} rounded-pill px-3 py-2">{{ p.status }}</span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-end">
+                    <div>
+                        <label class="small fw-bold text-muted text-uppercase d-block mb-1">Valid Until</label>
+                        <span class="fw-bold text-navy"><i class="bi bi-calendar-check me-1"></i> {{ p.expiry_date.strftime('%d %b, %Y') }}</span>
+                    </div>
+                    <a href="{{ url_for('admin.delete_offer', oid=p.id) }}" class="btn btn-light btn-sm rounded-3 text-danger" onclick="return confirm('Delete this promo code?')">
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- ADD PROMO MODAL -->
+<div class="modal fade" id="addPromoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4">
+            <div class="modal-header bg-navy text-white p-4">
+                <h5 class="modal-title fw-bold">Initialize Promo Code</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ url_for('admin.add_offer') }}" method="POST">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Voucher Code (Unique)</label>
+                        <input type="text" name="code" class="form-control py-2 text-uppercase" placeholder="e.g. SUMMER25" required>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Discount (%)</label>
+                            <input type="number" name="discount" class="form-control py-2" min="1" max="100" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Expiry Date</label>
+                            <input type="date" name="expiry" class="form-control py-2" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">CANCEL</button>
+                    <button type="submit" class="btn btn-navy rounded-pill px-4 shadow">PUBLISH OFFER</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Set min date for expiry to today
+    document.querySelector('input[type="date"]').min = new Date().toISOString().split("T")[0];
+</script>
+{% endblock %}

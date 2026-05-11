@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+
+<!-- We use a wider max-width for the register card to fit two columns -->
+<style>
+    .register-wrapper { max-width: 650px !important; }
+</style>
+
+<div class="auth-container py-5">
+    <div class="container d-flex justify-content-center">
+        
+        <!-- Rotating Border Wrapper -->
+        <div class="login-card-wrapper register-wrapper shadow-lg">
+            
+            <div class="login-card">
+                <div class="text-center mb-4">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" class="brand-logo-login">
+                    <h3 class="fw-bold text-navy">Create Account</h3>
+                    <p class="text-muted small">Join the elite circle of Boundless Air travelers</p>
+                </div>
+
+                <form method="POST">
+                    <div class="row">
+                        <!-- Full Name -->
+                        <div class="col-md-12 mb-3">
+                            <div class="form-floating">
+                                <input type="text" name="name" class="form-control" id="regName" placeholder="John Doe" required>
+                                <label for="regName" class="text-muted"><i class="bi bi-person me-2"></i>Full Name</label>
+                            </div>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="email" name="email" class="form-control" id="regEmail" placeholder="name@example.com" required>
+                                <label for="regEmail" class="text-muted"><i class="bi bi-envelope me-2"></i>Email Address</label>
+                            </div>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="tel" name="phone" class="form-control" id="regPhone" placeholder="9876543210" required>
+                                <label for="regPhone" class="text-muted"><i class="bi bi-telephone me-2"></i>Phone Number</label>
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <div class="form-floating flex-grow-1">
+                                    <input type="password" name="password" class="form-control border-end-0" id="regPass" placeholder="Password" style="border-radius: 12px 0 0 12px;" required>
+                                    <label for="regPass" class="text-muted"><i class="bi bi-lock me-2"></i>Password</label>
+                                </div>
+                                <span class="input-group-text" onclick="toggleRegPass('regPass', 'regEye')" style="cursor: pointer;">
+                                    <i class="bi bi-eye" id="regEye"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <div class="form-floating flex-grow-1">
+                                    <input type="password" name="confirm_password" class="form-control border-end-0" id="confirmPass" placeholder="Confirm Password" style="border-radius: 12px 0 0 12px;" required>
+                                    <label for="confirmPass" class="text-muted"><i class="bi bi-shield-check me-2"></i>Confirm</label>
+                                </div>
+                                <span class="input-group-text" onclick="toggleRegPass('confirmPass', 'confirmEye')" style="cursor: pointer;">
+                                    <i class="bi bi-eye" id="confirmEye"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-4 small mt-2">
+                        <input class="form-check-input" type="checkbox" value="" id="terms" required>
+                        <label class="form-check-label text-muted" for="terms">
+                            I agree to the <a href="#" class="text-navy fw-bold text-decoration-none">Terms of Service</a> and Privacy Policy.
+                        </label>
+                    </div>
+
+                    <button class="btn btn-login w-100 text-uppercase shadow">
+                        Sign Up & Start Journey
+                    </button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="small text-muted">Already have an account? 
+                        <a href="{{ url_for('auth.login') }}" class="fw-bold text-navy text-decoration-none border-bottom border-primary border-2">Login Here</a>
+                    </p>
+                </div>
+            </div> <!-- End login-card -->
+            
+        </div> <!-- End login-card-wrapper -->
+
+    </div>
+</div>
+
+<script>
+    function toggleRegPass(inputId, iconId) {
+        var x = document.getElementById(inputId);
+        var icon = document.getElementById(iconId);
+        if (x.type === "password") {
+            x.type = "text";
+            icon.classList.replace("bi-eye", "bi-eye-slash");
+        } else {
+            x.type = "password";
+            icon.classList.replace("bi-eye-slash", "bi-eye");
+        }
+    }
+</script>
+{% endblock %}

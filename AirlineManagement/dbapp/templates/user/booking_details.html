@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/booking.css') }}">
+
+<div class="container py-5">
+    
+    <!-- Progress Stepper -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <div class="stepper-wrapper">
+                <div class="step-item active">1 <span class="step-label fw-bold">Details</span></div>
+                <div class="step-item">2 <span class="step-label">Seats</span></div>
+                <div class="step-item">3 <span class="step-label">Payment</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Main Form Column -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="fw-bold text-navy mb-4">Passenger Information</h2>
+                    
+                    <form action="/book_seats" method="POST">
+                        <input type="hidden" name="flight_id" value="{{ flight.id }}">
+
+                        <!-- Section 1: Personal Profile -->
+                        <div class="form-section-title"><i class="bi bi-person-badge me-2"></i>Personal Profile</div>
+                        <div class="row g-3 mb-5">
+                            <div class="col-md-8">
+                                <div class="form-floating">
+                                    <input type="text" name="passenger_name" class="form-control premium-input" id="name" placeholder="Name" required>
+                                    <label for="name">Full Name (as per ID)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <select name="passenger_gender" class="form-select premium-input" id="gender">
+                                        <option>Male</option><option>Female</option><option>Other</option>
+                                    </select>
+                                    <label for="gender">Gender</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="date" name="dob" class="form-control premium-input" id="dob" required>
+                                    <label for="dob">Date of Birth</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" name="nationality" class="form-control premium-input" id="nat" value="Indian" required>
+                                    <label for="nat">Nationality</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Contact & ID -->
+                        <div class="form-section-title"><i class="bi bi-shield-check me-2"></i>Contact & Identification</div>
+                        <div class="row g-3 mb-5">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" name="passenger_email" class="form-control premium-input" id="email" placeholder="Email" required>
+                                    <label for="email">Email Address</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="tel" name="phone_num" class="form-control premium-input" id="phone" placeholder="Phone" required>
+                                    <label for="phone">Mobile Number</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                    <input type="text" name="gov_id" class="form-control premium-input" id="govid" placeholder="Gov ID" required>
+                                    <label for="govid">Government ID (Aadhaar / PAN / Passport Number)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Special Assistance -->
+                        <div class="form-section-title"><i class="bi bi-heart-pulse me-2"></i>Special Assistance</div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-muted mb-2">Medical Conditions / Requirements</label>
+                                <textarea name="medical_info" class="form-control premium-input" rows="3" placeholder="e.g. Wheelchair assistance, Allergies..."></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-muted mb-2">Infant Details (If any)</label>
+                                <textarea name="infant_details" class="form-control premium-input" rows="3" placeholder="Name and age of infant traveling with you"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 pt-4 border-top text-end">
+                            <button type="submit" class="btn btn-warning px-5 py-3 fw-bold rounded-pill shadow">
+                                SELECT YOUR SEAT <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Flight Summary Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-lg rounded-4 p-4 position-sticky" style="top: 100px;">
+                <h5 class="fw-bold text-navy mb-4">Flight Summary</h5>
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="text-center">
+                        <h4 class="fw-bold mb-0 text-navy">{{ flight.dep_code }}</h4>
+                        <small class="text-muted">{{ flight.src }}</small>
+                    </div>
+                    <div class="flex-grow-1 text-center px-3">
+                        <hr class="mb-1">
+                        <i class="bi bi-airplane-fill text-primary small"></i>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="fw-bold mb-0 text-navy">{{ flight.arr_code }}</h4>
+                        <small class="text-muted">{{ flight.dst }}</small>
+                    </div>
+                </div>
+
+                <div class="bg-light p-3 rounded-3 mb-4">
+                    <div class="d-flex justify-content-between small mb-2">
+                        <span class="text-muted">Airline</span>
+                        <span class="fw-bold">{{ flight.airline }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between small mb-2">
+                        <span class="text-muted">Flight No.</span>
+                        <span class="fw-bold">{{ flight.flight_num }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between small">
+                        <span class="text-muted">Date</span>
+                        <span class="fw-bold">{{ flight.dep_time.strftime('%d %b, %Y') }}</span>
+                    </div>
+                </div>
+
+                <div class="alert alert-info border-0 small mb-0">
+                    <i class="bi bi-info-circle me-2"></i> Prices include all taxes and airport fees.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+/* ==========================================================================
+   BOUNDLESS AIR - PREMIUM AUTH STYLES
+   ========================================================================== */
+
+.auth-container {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+/* --- THE STRIP EFFECT (Animated Border) --- */
+.login-card-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    padding: 3px; /* This creates the border thickness */
+    background: linear-gradient(0deg, #001f2e, #ffc107, #00a8e8, #001f2e);
+    background-size: 100% 300%;
+    border-radius: 25px;
+    animation: moveStrip 4s linear infinite;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes moveStrip {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 0% 100%; }
+}
+
+.login-card {
+    background: #ffffff;
+    border-radius: 22px; /* Slightly smaller than wrapper */
+    padding: 40px;
+    width: 100%;
+}
+
+/* --- ATTRACTIVE TEXT FIELDS --- */
+.form-floating > .form-control {
+    border: 2px solid #f0f2f5;
+    border-radius: 12px;
+    height: 60px;
+    transition: all 0.3s ease;
+}
+
+.form-floating > .form-control:focus {
+    border-color: var(--ba-gold);
+    box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.1);
+    background-color: #fff;
+}
+
+.input-group-text {
+    background: white;
+    border: 2px solid #f0f2f5;
+    border-left: none;
+    border-radius: 0 12px 12px 0;
+    color: #adb5bd;
+}
+
+/* --- PREMIUM BUTTON --- */
+.btn-login {
+    background: linear-gradient(45deg, #001f2e, #003e5c);
+    color: white;
+    border: none;
+    height: 55px;
+    border-radius: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-login:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 31, 46, 0.3);
+    color: var(--ba-gold);
+}
+
+.btn-login::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.5s;
+}
+
+.btn-login:hover::after {
+    left: 100%;
+}
+
+/* Branding elements */
+.brand-logo-login {
+    height: 70px;
+    margin-bottom: 15px;
+}

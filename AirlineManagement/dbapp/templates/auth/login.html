@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+
+<div class="auth-container">
+    <div class="container d-flex justify-content-center">
+        
+        <!-- Rotating Border Wrapper -->
+        <div class="login-card-wrapper shadow-lg">
+            
+            <div class="login-card">
+                <div class="text-center mb-4">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" class="brand-logo-login">
+                    <h4 class="fw-bold text-navy">Member Login</h4>
+                    <p class="text-muted small">Access your limitless journey</p>
+                </div>
+
+                <!-- NEW: Integrated Flash Message Display -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }} py-2 small border-0 shadow-sm mb-3 text-center">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i> {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                <form method="POST">
+                    <!-- Email Field with Value Retention -->
+                    <div class="form-floating mb-3">
+                        <input type="email" name="email" class="form-control" id="floatingInput" 
+                               placeholder="name@example.com" value="{{ email if email else '' }}" required>
+                        <label for="floatingInput" class="text-muted"><i class="bi bi-envelope me-2"></i>Email Address</label>
+                    </div>
+                    
+                    <!-- Password Field with Value Retention & Toggle -->
+                    <div class="input-group mb-2">
+                        <div class="form-floating flex-grow-1">
+                            <input type="password" name="password" class="form-control border-end-0" id="userPass" 
+                                   placeholder="Password" value="{{ password if password else '' }}" 
+                                   style="border-radius: 12px 0 0 12px;" required>
+                            <label for="userPass" class="text-muted"><i class="bi bi-lock me-2"></i>Password</label>
+                        </div>
+                        <span class="input-group-text" onclick="toggleUserPass()" style="cursor: pointer;">
+                            <i class="bi bi-eye" id="userEye"></i>
+                        </span>
+                    </div>
+
+                    <div class="text-end mb-4">
+                        <a href="#" class="text-decoration-none small fw-bold text-navy">Forgot Password?</a>
+                    </div>
+
+                    <button class="btn btn-login w-100 text-uppercase">
+                        Login to Boundless Air
+                    </button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="small text-muted">Don't have an account? 
+                        <a href="{{ url_for('auth.register') }}" class="fw-bold text-navy text-decoration-none border-bottom border-primary border-2">Register Now</a>
+                    </p>
+                </div>
+            </div> <!-- End login-card -->
+            
+        </div> <!-- End login-card-wrapper -->
+
+    </div>
+</div>
+
+<script>
+    function toggleUserPass() {
+        var x = document.getElementById("userPass");
+        var icon = document.getElementById("userEye");
+        if (x.type === "password") {
+            x.type = "text";
+            icon.classList.replace("bi-eye", "bi-eye-slash");
+        } else {
+            x.type = "password";
+            icon.classList.replace("bi-eye-slash", "bi-eye");
+        }
+    }
+</script>
+{% endblock %}

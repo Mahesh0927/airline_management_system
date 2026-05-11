@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Link the specific About CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+
+<!-- ================= ABOUT HERO ================= -->
+<section class="about-hero">
+    <div class="container">
+        <h1 class="display-4">Wings Without Limits</h1>
+        <p class="lead opacity-75">India's most trusted premium airline service.</p>
+        <div class="section-title-underline"></div>
+    </div>
+</section>
+
+<div class="container my-5">
+    <!-- ================= JOURNEY SECTION ================= -->
+    <div class="row align-items-center mb-5 pb-5">
+        <div class="col-lg-6">
+            <h6 class="text-uppercase fw-bold text-warning mb-2">Our Story</h6>
+            <h2 class="fw-bold text-navy display-6 mb-4">A Legacy of Premium Flight</h2>
+            <p class="text-muted">Founded in 2026, <strong>Boundless Air</strong> was established to redefine the Indian aviation landscape. We believe that travel should be more than just moving from one city to another; it should be a seamless transition of comfort and class.</p>
+            <p class="mb-4">From our hub in Mumbai, we've expanded to connect every corner of Incredible India, ensuring that whether you're traveling for business or leisure, you do it with the luxury you deserve.</p>
+            
+            <div class="row g-4 mt-2">
+                <div class="col-6 stat-card">
+                    <h3 class="fw-bold mb-0">45+</h3>
+                    <span class="text-muted small fw-bold">INDIAN CITIES</span>
+                </div>
+                <div class="col-6 stat-card">
+                    <h3 class="fw-bold mb-0">15M+</h3>
+                    <span class="text-muted small fw-bold">HAPPY PASSENGERS</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mt-5 mt-lg-0">
+            <img src="{{ url_for('static', filename='images/about_fleet.jpeg') }}" class="img-fluid about-img" alt="Boundless Air Fleet">
+        </div>
+    </div>
+
+    <!-- ================= CORE VALUES ================= -->
+    <section class="py-5 mb-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-navy">The Boundless Standard</h2>
+            <div class="section-title-underline"></div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="value-box text-center h-100">
+                    <div class="icon-circle"><i class="bi bi-shield-lock"></i></div>
+                    <h5 class="fw-bold text-navy">Safety First</h5>
+                    <p class="small text-muted mb-0">Adhering to international safety protocols with a modern, well-maintained fleet.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="value-box text-center h-100">
+                    <div class="icon-circle"><i class="bi bi-gem"></i></div>
+                    <h5 class="fw-bold text-navy">Luxury Redefined</h5>
+                    <p class="small text-muted mb-0">Premium cabin interiors designed for ultimate comfort and productivity.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="value-box text-center h-100">
+                    <div class="icon-circle"><i class="bi bi-clock-history"></i></div>
+                    <h5 class="fw-bold text-navy">Punctuality</h5>
+                    <p class="small text-muted mb-0">Consistently ranked as one of the most on-time carriers in the subcontinent.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= MISSION & VISION ================= -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card h-100 border-0 bg-navy text-white p-4 rounded-4 shadow-sm mission-card">
+                <h4 class="fw-bold text-warning">Our Mission</h4>
+                <p class="mt-3 opacity-75">To empower every traveler in India by providing a world-class flight experience that is safe, luxurious, and accessible, fostering growth and connection across the nation.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100 border-0 bg-white p-4 rounded-4 shadow-sm mission-card">
+                <h4 class="fw-bold text-navy">Our Vision</h4>
+                <p class="mt-3 text-muted">To be the heartbeat of Indian aviation, setting new global benchmarks for hospitality and operational excellence in the skies.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= CALL TO ACTION ================= -->
+    <div class="about-cta text-center shadow-lg">
+        <h2 class="fw-bold text-navy mb-3">Experience the Sky with Boundless Air</h2>
+        <p class="text-navy opacity-75 mb-4">Book your journey today and feel the difference.</p>
+        <a href="/" class="btn-navy-outline">BOOK A FLIGHT NOW</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+/* BOUNDLESS AIR - USER COMMAND CENTER */
+:root {
+    --ba-midnight: #001f2e;
+    --ba-gold: #ffc107;
+    --ba-sky: #00a8e8;
+}
+
+.dashboard-container { background: #f4f7f9; min-height: 100vh; padding: 40px 0; }
+.text-navy { color: var(--ba-midnight) !important; }
+
+/* Interactive Cards */
+.dash-card {
+    background: #fff;
+    border: none;
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+.dash-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 31, 46, 0.12) !important;
+}
+
+/* Swap Button */
+.swap-btn {
+    width: 42px; height: 42px;
+    background: var(--ba-midnight);
+    color: var(--ba-gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: 0.4s;
+    border: 3px solid white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+.swap-btn:hover { transform: rotate(180deg); background: var(--ba-gold); color: var(--ba-midnight); }
+
+/* Quick Actions */
+.action-icon {
+    width: 50px; height: 50px;
+    background: #f8fafc;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ba-midnight);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+.action-hover:hover .action-icon { background: var(--ba-midnight); color: var(--ba-gold); }
+
+/* --- Offer Card (Height Matching) --- */
+.offer-card {
+    background: linear-gradient(135deg, var(--ba-midnight) 0%, #003e5c 100%) !important;
+    color: #ffffff !important;
+    border: 2px solid var(--ba-gold) !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers content vertically */
+}
+.promo-code {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px dashed var(--ba-gold);
+    color: var(--ba-gold);
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-family: 'Courier New', monospace;
+    font-weight: 800;
+    display: inline-block;
+}
+
+/* --- Trending Image Fix (Object-Fit Cover) --- */
+.trending-img-container {
+    height: 120px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    border-radius: 20px 20px 0 0;
+}
+.trending-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+    object-position: center;
+    transition: transform 0.6s ease;
+}
+.dash-card:hover .trending-img { transform: scale(1.1); }
+
+/* --- Booking Scroll Area --- */
+.bookings-scroll-area {
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+.bookings-scroll-area::-webkit-scrollbar { width: 5px; }
+.bookings-scroll-area::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+.bookings-scroll-area::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+.bookings-scroll-area::-webkit-scrollbar-thumb:hover { background: var(--ba-midnight); }
+
+/* Booking Item */
+.booking-item-card {
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    border-radius: 18px;
+    padding: 18px;
+    transition: all 0.3s ease;
+    border-left: 6px solid var(--ba-midnight);
+}
+.booking-item-card:hover { border-left-color: var(--ba-gold); transform: translateX(4px); }
+.route-code { font-size: 1.3rem; font-weight: 800; color: var(--ba-midnight); }
+.route-line { height: 2px; width: 45px; background: #e2e8f0; margin-top: -8px; }
+
+.badge-confirmed { background: #d1e7dd !important; color: #0f5132 !important; }
+.badge-cancelled { background: #f8d7da !important; color: #842029 !important; }
+
+.btn-action { border-radius: 50px; font-size: 0.75rem; font-weight: 700; padding: 5px 12px; }

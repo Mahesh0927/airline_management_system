@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <!-- Header with Admin Icon -->
+                <div class="bg-dark p-4 text-center text-white">
+                    <i class="bi bi-shield-lock-fill display-4 text-warning"></i>
+                    <h3 class="fw-bold mt-2">Admin Login</h3>
+                    <p class="small opacity-75 mb-0">Authorized Personnel Only</p>
+                </div>
+                
+                <div class="card-body p-4 bg-light">
+                    <!-- NEW: Flash Error Messages displayed inside the card -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="alert alert-{{ category }} py-2 small border-0 mb-3 text-center shadow-sm">
+                             {{ message }}
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-uppercase">Admin Email</label>
+                            <!-- Retains email value if POST fails -->
+                            <input type="email" name="email" class="form-control py-2 border-0 shadow-sm" 
+                                   placeholder="admin@boundlessair.com" value="{{ email if email else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-uppercase">Access Password</label>
+                            <div class="input-group shadow-sm rounded">
+                                <!-- Retains password value if POST fails -->
+                                <input type="password" name="password" id="adminPass" class="form-control py-2 border-0" 
+                                       value="{{ password if password else '' }}" required>
+                                <span class="input-group-text bg-white border-0" onclick="toggleAdminPass()" style="cursor: pointer;">
+                                    <i class="bi bi-eye text-muted" id="adminEye"></i>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-dark w-100 py-2 fw-bold shadow-sm rounded-pill">
+                            VERIFY & ACCESS
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="card-footer bg-white border-0 text-center py-3">
+                    <a href="/" class="text-decoration-none small text-muted"><i class="bi bi-arrow-left me-1"></i> Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleAdminPass() {
+        var x = document.getElementById("adminPass");
+        var icon = document.getElementById("adminEye");
+        if (x.type === "password") {
+            x.type = "text";
+            icon.classList.replace("bi-eye", "bi-eye-slash");
+        } else {
+            x.type = "password";
+            icon.classList.replace("bi-eye-slash", "bi-eye");
+        }
+    }
+</script>
+{% endblock %}

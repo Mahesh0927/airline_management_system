@@ -1,0 +1,96 @@
+/* --- ADMIN BOOKINGS MANAGEMENT --- */
+
+.booking-stats-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px;
+    border-left: 5px solid var(--ba-gold);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+}
+
+.table-premium {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 31, 46, 0.05);
+    overflow: hidden;
+}
+
+.table-premium thead th {
+    background: #f8fafc;
+    color: #94a3b8;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 20px;
+    border: none;
+}
+
+.table-premium tbody td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+/* Status Badges */
+.badge-status {
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.status-Confirmed { background: #dcfce7; color: #15803d; }
+.status-Cancelled { background: #fee2e2; color: #991b1b; }
+.status-Pending { background: #fef3c7; color: #92400e; }
+
+/* Passenger Meta */
+.pax-meta {
+    font-size: 0.75rem;
+    color: #64748b;
+    display: block;
+    margin-top: 2px;
+}
+
+/* Detail Modal Styles */
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+/* Detail rows for the Eye-button Modal */
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dashed #edf2f7;
+}
+
+.detail-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+.detail-value {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--ba-navy);
+}
+
+.modal-header.bg-navy {
+    background-color: var(--ba-navy) !important;
+}
+
+#modalLoader {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.detail-label { font-weight: 700; color: #64748b; font-size: 0.85rem; }
+.detail-value { font-weight: 600; color: var(--ba-navy); }

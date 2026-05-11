@@ -1,0 +1,89 @@
+/* BOUNDLESS AIR - SEARCH RESULTS STYLES */
+
+.results-header {
+    background: var(--ba-midnight);
+    color: white;
+    padding: 30px 0;
+    margin-bottom: 40px;
+    border-bottom: 4px solid var(--ba-gold);
+}
+
+.flight-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.flight-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 25px rgba(0, 31, 46, 0.1);
+}
+
+.airline-info {
+    border-right: 1px dashed #ddd;
+    padding: 20px;
+    background: #fcfcfc;
+}
+
+.flight-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.dot {
+    height: 10px;
+    width: 10px;
+    background-color: var(--ba-midnight);
+    border-radius: 50%;
+}
+
+.plane-line {
+    flex-grow: 1;
+    height: 2px;
+    background: #ddd;
+    margin: 0 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plane-line i {
+    color: var(--ba-midnight);
+    background: white;
+    padding: 0 5px;
+    font-size: 1.2rem;
+}
+
+.price-section {
+    background: #fff9e6;
+    border-left: 1px solid #ffeeba;
+    padding: 20px;
+    text-align: center;
+}
+
+.discount-badge {
+    background: #ff4757;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 50px;
+    font-weight: bold;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #a4b0be;
+    font-size: 0.9rem;
+}
+
+.final-price {
+    color: var(--ba-midnight);
+    font-size: 1.6rem;
+    font-weight: 800;
+}

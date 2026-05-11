@@ -1,0 +1,82 @@
+/* --- Progress Stepper --- */
+.stepper-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.stepper-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 0;
+    width: 100%; height: 2px;
+    background: #e2e8f0;
+    z-index: 1;
+}
+
+.step-item {
+    position: relative;
+    z-index: 2;
+    background: #fff;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #e2e8f0;
+    font-weight: bold;
+    color: #64748b;
+    transition: all 0.3s ease;
+}
+
+.step-item.active {
+    background: var(--ba-gold);
+    border-color: var(--ba-midnight);
+    color: var(--ba-midnight);
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
+}
+
+.step-label {
+    position: absolute;
+    top: 45px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #64748b;
+}
+
+/* --- Form UX --- */
+.form-section-title {
+    font-size: 0.9rem;
+    color: var(--ba-midnight);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.form-section-title::after {
+    content: '';
+    flex-grow: 1;
+    height: 1px;
+    background: #e2e8f0;
+    margin-left: 15px;
+}
+
+.premium-input {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+.premium-input:focus {
+    background: #fff;
+    border-color: var(--ba-gold);
+    box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.1);
+}

@@ -1,0 +1,46 @@
+/* --- ADMIN USER MANAGEMENT UI --- */
+
+.user-profile-circle {
+    width: 45px; height: 45px;
+    background: var(--ba-navy);
+    color: var(--ba-gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 31, 46, 0.1);
+}
+
+.user-row:hover {
+    background-color: #fcfdfe;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+.status-active { background: #dcfce7; color: #15803d; }
+.status-blocked { background: #fee2e2; color: #991b1b; }
+
+/* Metrics */
+.user-metric {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* History Modal Scroll Area */
+.history-scroll {
+    max-height: 400px;
+    overflow-y: auto;
+}
+.history-item {
+    padding: 15px;
+    border-radius: 12px;
+    background: #f8fafc;
+    margin-bottom: 10px;
+    border: 1px solid #e2e8f0;
+}

@@ -1,0 +1,212 @@
+/* ==========================================================================
+   BOUNDLESS AIR - PREMIUM CSS (MODULAR)
+   ========================================================================== */
+
+:root {
+    --ba-midnight: #001f2e;   /* Professional Navy from logo palette */
+    --ba-gold: #ffc107;       /* Airline Gold for accents */
+    --ba-sky: #00a8e8;        /* Sky Blue from logo icon */
+    --ba-white: #ffffff;
+    --ba-light: #f4f7f9;
+}
+
+/* 1. General Reset */
+body {
+    font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+    background-color: var(--ba-light);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* 2. Navbar Styling (Midnight Theme) */
+.navbar { 
+    background: var(--ba-midnight) !important; 
+    padding: 0.6rem 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    border-bottom: 2px solid var(--ba-gold);
+    margin-bottom: 0 !important; /* Removes gap to Hero */
+}
+
+.navbar-brand { 
+    color: var(--ba-white) !important; 
+    font-weight: 800; 
+    font-size: 1.7rem; 
+    letter-spacing: -1px;
+    text-transform: uppercase;
+}
+
+/* Logo Fix: Turns dark logo text into white for dark navbar */
+.logo-img { 
+    height: 55px; 
+    margin-right: 5px; 
+    filter: brightness(0) invert(1); 
+    transition: transform 0.3s ease;
+}
+
+.nav-link { 
+    color: rgba(255, 255, 255, 0.9) !important; 
+    font-weight: 500; 
+    margin: 0 10px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--ba-gold) !important;
+    transform: translateY(-2px);
+}
+
+.dropdown-menu {
+    background-color: var(--ba-midnight);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    margin-top: 10px;
+}
+
+.dropdown-item {
+    color: var(--ba-white);
+    padding: 10px 20px;
+}
+
+.dropdown-item:hover {
+    background-color: var(--ba-gold);
+    color: var(--ba-midnight);
+}
+
+/* 3. Hero Section (Centering & Background) */
+.hero-section {
+    position: relative;
+    margin-top: 0 !important;
+    /* Path to your provided plane image */
+    background: linear-gradient(rgba(0, 31, 46, 0.4), rgba(0, 31, 46, 0.6)), 
+                url('../images/hero_bg.jpg');
+    height: 65vh; 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Creates parallax effect */
+    color: var(--ba-white); 
+    
+    /* Perfect Centering Logic */
+    display: flex; 
+    flex-direction: column;    
+    align-items: center;       
+    justify-content: center;   
+    text-align: center;
+}
+.slogan { 
+    font-size: 1.5rem; 
+    font-weight: 300;
+    max-width: 850px;
+    margin: 0 auto;            /* CRITICAL: Ensures it stays centered if max-width is used */
+    text-shadow: 1px 2px 5px rgba(0,0,0,0.6);
+    line-height: 1.4;
+}
+
+.main-title { 
+    font-size: 5.5rem; 
+    font-weight: 900; 
+    letter-spacing: -3px; 
+    margin-bottom: 5px;
+    text-shadow: 2px 4px 12px rgba(0,0,0,0.4);
+    line-height: 1;
+}
+
+.slogan { 
+    font-size: 1.6rem; 
+    font-weight: 300;
+    max-width: 800px;
+    text-shadow: 1px 2px 5px rgba(0,0,0,0.6);
+}
+
+/* 4. Search Card (Floating Design) */
+.card {
+    border-radius: 1.25rem;
+    transition: transform 0.3s ease;
+}
+
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0, 53, 128, 0.15) !important;
+}
+
+.text-navy {
+    color: var(--ba-midnight);
+}
+
+/* 5. Buttons & UI */
+.btn-warning {
+    background-color: var(--ba-gold) !important;
+    border: none;
+    color: var(--ba-midnight) !important;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+    background-color: var(--ba-midnight) !important;
+    color: var(--ba-white) !important;
+    transform: scale(1.05);
+}
+
+.form-select, .form-control {
+    border-radius: 10px;
+}
+
+.form-select:focus, .form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+    border-color: var(--ba-gold);
+}
+
+/* 6. Footer Section */
+.footer { 
+    background: var(--ba-midnight) !important; 
+    color: var(--ba-white); 
+    padding: 30px 0; 
+    margin-top: 70px;
+    border-top: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.footer-logo {
+    height: 50px;
+    filter: brightness(0) invert(1);
+    margin-bottom: 25px;
+}
+
+.footer .bi {
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+}
+
+.footer .bi:hover {
+    color: var(--ba-gold) !important;
+    transform: translateY(-5px);
+}
+
+/* 7. Auth Page Specific (Login/Register) */
+.password-toggle {
+    cursor: pointer;
+}
+
+.bg-auth {
+    background-color: var(--ba-midnight);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+/* Animation for Flash Messages */
+.alert {
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .main-title { font-size: 3.5rem; }
+    .slogan { font-size: 1.2rem; }
+    .hero-section { height: 50vh; }
+    .search-card { margin-top: -30px !important; }
+}

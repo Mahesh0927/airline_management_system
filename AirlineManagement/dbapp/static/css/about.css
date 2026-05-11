@@ -1,0 +1,115 @@
+/* ==========================================================================
+   BOUNDLESS AIR - ABOUT PAGE SPECIFIC STYLES
+   ========================================================================== */
+
+/* 1. About Hero Section */
+.about-hero {
+    background: linear-gradient(rgba(0, 31, 46, 0.85), rgba(0, 31, 46, 0.85)), 
+                url('../images/hero_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: scroll; /* Different from fixed to distinguish sub-pages */
+    padding: 120px 0 80px 0;
+    color: white;
+    text-align: center;
+    border-bottom: 4px solid var(--ba-gold);
+}
+
+.about-hero h1 {
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* 2. Content Sections */
+.text-navy {
+    color: var(--ba-midnight);
+}
+
+.bg-navy {
+    background-color: var(--ba-midnight) !important;
+}
+
+.section-title-underline {
+    width: 60px;
+    height: 4px;
+    background-color: var(--ba-gold);
+    margin: 15px auto;
+}
+
+/* 3. Stats Section */
+.stat-card h3 {
+    font-size: 2.5rem;
+    color: var(--ba-midnight);
+}
+
+/* 4. Value Boxes */
+.value-box {
+    padding: 30px;
+    border-radius: 20px;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.value-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 31, 46, 0.1);
+}
+
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    background: var(--ba-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: var(--ba-gold);
+    font-size: 2rem;
+}
+
+/* 5. Mission & Vision Cards */
+.mission-card {
+    border-left: 5px solid var(--ba-gold);
+    transition: border-left 0.3s ease;
+}
+
+.mission-card:hover {
+    border-left: 10px solid var(--ba-gold);
+}
+
+/* 6. Call To Action (CTA) */
+.about-cta {
+    background-color: var(--ba-gold);
+    padding: 60px 0;
+    border-radius: 30px;
+    margin: 40px 0;
+}
+
+.btn-navy-outline {
+    border: 2px solid var(--ba-midnight);
+    color: var(--ba-midnight);
+    font-weight: 700;
+    padding: 12px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-navy-outline:hover {
+    background-color: var(--ba-midnight);
+    color: var(--ba-gold);
+}
+
+/* 7. Image Styling */
+.about-img {
+    border-radius: 30px;
+    box-shadow: 20px 20px 0px var(--ba-gold); /* Modern offset shadow */
+    transition: transform 0.3s ease;
+}
+
+.about-img:hover {
+    transform: scale(1.02);
+}

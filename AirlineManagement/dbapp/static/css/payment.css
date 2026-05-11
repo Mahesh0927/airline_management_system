@@ -1,0 +1,124 @@
+/* BOUNDLESS AIR - PREMIUM CHECKOUT UI */
+:root {
+    --ba-midnight: #001f2e;
+    --ba-gold: #ffc107;
+    --ba-sky: #00a8e8;
+    --ba-success: #2ecc71;
+}
+
+.checkout-wrapper {
+    background-color: #f4f7f9;
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+/* --- STEPPER ALIGNMENT (Identical to Seats/Details) --- */
+.stepper-wrapper {
+    display: flex; justify-content: space-between; margin-bottom: 3rem; position: relative;
+}
+.stepper-wrapper::before {
+    content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: #e2e8f0; z-index: 1;
+}
+.step-item {
+    position: relative; z-index: 2; background: #fff; width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; border: 2px solid #e2e8f0;
+    font-weight: bold; color: #64748b;
+}
+.step-item.active { background: var(--ba-gold); border-color: var(--ba-midnight); color: var(--ba-midnight); box-shadow: 0 0 15px rgba(255, 193, 7, 0.4); }
+.step-item.completed { background: var(--ba-midnight); border-color: var(--ba-midnight); color: white; }
+.step-label { position: absolute; top: 48px; font-size: 0.7rem; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: #64748b; }
+
+/* --- PAYMENT CARDS --- */
+.payment-card {
+    background: #ffffff;
+    border-radius: 25px;
+    border: none;
+    box-shadow: 0 15px 35px rgba(0, 31, 46, 0.05);
+}
+
+/* UPDATED: Added explicit color and display rules to ensure fonts are visible */
+.nav-pills .nav-link {
+    background: #f1f5f9;
+    color: var(--ba-midnight) !important; /* Force Midnight color for non-active text */
+    margin-bottom: 12px;
+    border-radius: 15px;
+    padding: 15px 20px;
+    font-weight: 700 !important; /* Premium bold font */
+    font-size: 0.95rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    opacity: 1 !important;
+}
+
+/* Added Icon specific styling for UX */
+.nav-pills .nav-link i {
+    color: var(--ba-sky);
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.nav-pills .nav-link.active {
+    background: var(--ba-midnight) !important;
+    color: var(--ba-gold) !important; /* Force Gold color for active text */
+    border-color: var(--ba-midnight);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 31, 46, 0.2);
+}
+
+.nav-pills .nav-link.active i {
+    color: var(--ba-gold) !important;
+}
+
+/* Hover Effect for better UX */
+.nav-pills .nav-link:hover:not(.active) {
+    background-color: #e2e8f0;
+    color: var(--ba-midnight) !important;
+}
+
+/* --- RECEIPT STYLES --- */
+.receipt-container {
+    background: #fff;
+    border-radius: 25px;
+    overflow: hidden;
+    position: sticky;
+    top: 100px;
+}
+
+.receipt-head {
+    background: var(--ba-midnight);
+    color: white;
+    padding: 25px;
+}
+
+.price-breakdown {
+    padding: 25px;
+    background: #fff;
+}
+
+.dashed-line {
+    border-top: 2px dashed #e2e8f0;
+    margin: 20px 0;
+}
+
+.total-footer {
+    background: #fff9e6;
+    padding: 25px;
+    border-top: 2px solid var(--ba-gold);
+}
+
+/* --- INPUTS --- */
+.checkout-input {
+    background: #f8fafc;
+    border: 2px solid #f1f5f9;
+    border-radius: 12px;
+    padding: 12px;
+}
+.checkout-input:focus {
+    border-color: var(--ba-gold);
+    background: #fff;
+    box-shadow: none;
+}

@@ -1,0 +1,59 @@
+/* BOUNDLESS AIR - INTELLIGENT CHATBOT UI */
+.chatbot-toggler {
+    position: fixed; bottom: 30px; right: 35px;
+    width: 65px; height: 65px;
+    background: var(--ba-midnight);
+    color: var(--ba-gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 1000;
+    box-shadow: 0 10px 25px rgba(0, 31, 46, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.chatbot-toggler:hover { transform: scale(1.1) rotate(10deg); }
+
+.chat-container {
+    position: fixed; bottom: 110px; right: 35px;
+    width: 380px; height: 580px;
+    background: #ffffff; border-radius: 24px;
+    display: none; flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    z-index: 1001; overflow: hidden;
+    animation: chatOpen 0.4s ease-out;
+}
+
+@keyframes chatOpen { from { transform: translateY(30px) scale(0.9); opacity: 0; } }
+
+.chat-header {
+    background: linear-gradient(135deg, var(--ba-midnight) 0%, #003e5c 100%);
+    color: white; padding: 22px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+
+.chat-body {
+    flex-grow: 1; padding: 20px;
+    overflow-y: auto; background: #f4f7f9;
+    display: flex; flex-direction: column; gap: 15px;
+}
+
+.msg { max-width: 85%; padding: 12px 18px; border-radius: 18px; font-size: 0.92rem; line-height: 1.5; }
+.msg.bot { 
+    background: white; color: var(--ba-navy); 
+    align-self: flex-start; border-bottom-left-radius: 4px;
+    border: 1px solid #e2e8f0;
+}
+.msg.user { 
+    background: var(--ba-midnight); color: white; 
+    align-self: flex-end; border-bottom-right-radius: 4px; 
+}
+
+.qr-btn { 
+    background: transparent; border: 2px solid var(--ba-gold); 
+    color: var(--ba-midnight); padding: 6px 14px; border-radius: 50px;
+    font-size: 0.8rem; font-weight: 700; cursor: pointer; 
+    margin: 4px; transition: 0.3s;
+}
+.qr-btn:hover { background: var(--ba-gold); transform: translateY(-2px); }
+
+.chat-footer { padding: 15px; background: white; border-top: 1px solid #edf2f7; }
+.chat-input { border: none; width: 100%; outline: none; font-size: 0.95rem; background: transparent; }
